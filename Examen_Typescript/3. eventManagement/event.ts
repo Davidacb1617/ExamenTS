@@ -1,4 +1,4 @@
-import { Spaceship } from './spaceship.js';
+import { Spaceship } from '../2. spaceOfTheGame/spaceship.js';
 
 // Define an enum for the types of events
 export enum EventType {

@@ -1,4 +1,4 @@
-import { ResourceType } from '../Instructions/world.js';
+import { ResourceType } from './world.js';
 
 // Define an interface to represent a resource with its quantity
 export interface ResourceWithQuantity {

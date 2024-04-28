@@ -1,0 +1,3 @@
+# Propósito del juego
+
+"El propósito inicial de la creación de este juego es la instancia y estructuración de datos en TypeScript. Al desarrollar el juego, se prioriza la correcta definición y organización de las clases, interfaces y tipos de datos en TypeScript para garantizar un código limpio, mantenible y fácilmente comprensible. Esta estructuración cuidadosa de los datos permite una mejor modularidad y extensibilidad del juego, facilitando futuras actualizaciones y mejoras en el proyecto. También se tiene en cuenta el nombramiento de los tipos de datos primitivos / especiales / objetos / clases / interfaces / funciones / arreglos."

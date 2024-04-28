@@ -1,30 +1,33 @@
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import { Spaceship } from './Instructions/spaceship.js';
-import { Planet } from './Instructions/world.js';
-import { DangerLevel } from './Instructions/world.js';
-import { Exploration } from './Funcionalities/exploration.js';
-import { Event, EventType } from './Instructions/event.js';
-import { ClickEvent } from './Funcionalities/event_management.js';
-import { DoubleClickEvent } from './Funcionalities/event_management.js';
-import { HoverEvent } from './Funcionalities/event_management.js';
-import { DragEvent } from './Funcionalities/event_management.js';
-import { handleEvent } from './Funcionalities/event_management.js';
-import { getRandomResourceWithQuantity } from './Funcionalities/resources_collection.js';
-import { ResourceWithQuantity } from './Funcionalities/resources_collection.js';
-import { getRandomEvent } from './Instructions/event.js';
-// Define class Player with the Spaceship properties
+import { Spaceship } from '../2. spaceOfTheGame/spaceship.js';
+import { Planet } from '../2. spaceOfTheGame/world.js';
+import { DangerLevel } from '../2. spaceOfTheGame/world.js';
+import { Exploration } from '../2. spaceOfTheGame/exploration.js';
+import { Event, EventType } from '../3. eventManagement/event.js';
+import { ClickEvent } from '../3. eventManagement/event_management.js';
+import { DoubleClickEvent } from '../3. eventManagement/event_management.js';
+import { HoverEvent } from '../3. eventManagement/event_management.js';
+import { DragEvent } from '../3. eventManagement/event_management.js';
+import { handleEvent } from '../3. eventManagement/event_management.js';
+import { getRandomResourceWithQuantity } from '../2. spaceOfTheGame/resources_collection.js';
+import { ResourceWithQuantity } from '../2. spaceOfTheGame/resources_collection.js';
+import { getRandomEvent } from '../3. eventManagement/event.js';
+
+// Define the Player and its properties
 class Player {
   name: string;
   people: Spaceship['capacity'];
   heatlh: number = 100;
   spaceshipHealth: Spaceship['health'] = 100;
-  private speed: Spaceship['speed'] = 500;
+  speed: Spaceship['speed'] = 500;
 
   constructor(name: string, people: Spaceship['capacity']) {
     this.name = name;
     this.people = people;
   }
+
+  // Define the Player methods
   spaceshipDamage() {
     this.spaceshipHealth -= 15;
   }
@@ -51,22 +54,40 @@ class Mission {
     this.name = name;
     this.description = description;
   }
-
-  // Define the Mission methods
 }
+// SPACESHIP ASCII Art
+//DO NOT MODIFY || THE ASCII ART ONLY WORKS IN JAVASCRIPT (I THINK SO)
+console.log(
+  chalk.bold.green(`
+
+       !\r\n       !\r\n       ^\r\n      \/ \\\r\n     \/___\\\r\n    |=   =|\r\n    |     |\r\n    |     |\r\n    |     |\r\n    |     |\r\n    |     |\r\n    |     |\r\n    |     |\r\n    |     |\r\n    |     |\r\n   \/|##!##|\\\r\n  \/ |##!##| \\\r\n \/  |##!##|  \\\r\n|  \/ ^ | ^ \\  |\r\n| \/  ( | )  \\ |\r\n|\/   ( | )   \\|\r\n    ((   ))\r\n   ((  :  ))\r\n   ((  :  ))\r\n    ((   ))\r\n     (( ))\r\n      ( )\r\n       .\r\n       .\r\n       .
+
+
+\r\n ______  ______  ______  ______  ______  ______  __  __  __  ______  \r\n\/\\  ___\\\/\\  == \\\/\\  __ \\\/\\  ___\\\/\\  ___\\\/\\  ___\\\/\\ \\_\\ \\\/\\ \\\/\\  == \\ \r\n\\ \\___  \\ \\  _-\/\\ \\  __ \\ \\ \\___\\ \\  __\\\\ \\___  \\ \\  __ \\ \\ \\ \\  _-\/ \r\n \\\/\\_____\\ \\_\\   \\ \\_\\ \\_\\ \\_____\\ \\_____\\\/\\_____\\ \\_\\ \\_\\ \\_\\ \\_\\   \r\n  \\\/__________  ______\\\/__\\\/_____\/_______\/\\\/_____\/\\\/_\/\\\/_\/\\\/_\/\\\/_\/   \r\n       \/\\  ___\\\/\\  __ \\\/\\ \"-.\/  \\\/\\  ___\\                            \r\n       \\ \\ \\__ \\ \\  __ \\ \\ \\-.\/\\ \\ \\  __\\                            \r\n        \\ \\_____\\ \\_\\ \\_\\ \\_\\ \\ \\_\\ \\_____\\                          \r\n         \\\/_____\/\\\/_\/\\\/_\/\\\/_\/  \\\/_\/\\\/_____\/                          \r\n                                                                     \r\n
+
+
+`)
+);
 
 // Player Name & Mission Selection
 let player = await inquirer.prompt({
   type: 'input',
   name: 'name',
   message: 'Ingresa tu nombre:',
+  //Validate the name input by the user
+  validate: (input) => {
+    if (input.trim() === '') {
+      return 'El nombre no puede estar vacío';
+    }
+    return true;
+  },
 });
 
 let mission = await inquirer.prompt({
   type: 'list',
   name: 'select',
   message: 'Selecciona la misión que quieres realizar:',
-  choices: ['Investigación', 'Recolectar Recursos', 'Entrega de Recursos'],
+  choices: ['Investigación', 'Recolectar Recursos'],
 });
 
 // Gather Data
@@ -83,8 +104,8 @@ let m3 = new Mission(
   mission.select,
   'Entregar recursos a otras bases espaciales'
 );
-//RANDOM RESOURCES
 
+//RANDOM RESOURCES
 const randomResourceAndQuantity: ResourceWithQuantity =
   getRandomResourceWithQuantity();
 
@@ -121,6 +142,15 @@ const direction4 = new Exploration('oeste');
 
 do {
   // Investigate Mission
+  console.log(chalk.bold.green(`Te encuentras dentro de la nave ${p1.name}`));
+  console.log(
+    chalk.bold.green(`La nave cuenta con una vida de ${p1.spaceshipHealth}`)
+  );
+  console.log(
+    chalk.bold.green(
+      `La nave tiene un motor espacial avanzado, el cuál te permite mantener siempre la misma velocidad de ${p1.speed} km/h`
+    )
+  );
   if (mission.select === 'Investigación') {
     console.log(
       chalk.bold.green(
@@ -526,8 +556,8 @@ do {
         }
       } while (true);
     }
-    //MARS SELECTION
-    if (planet.select === 'Marte') {
+    //VENUS SELECTION
+    if (planet.select === 'Venus') {
       console.log(
         `Has llegado a ${planet1.name} ${p1.name} junto a tu tripulación de ${p1.people} personas`
       );
@@ -542,7 +572,7 @@ do {
       if (ask.confirm == true) {
         console.log(chalk.bold.yellow('Entrando en el planeta...'));
       }
-      //GAME MISSION LOOP FOR MARS
+      //GAME MISSION LOOP FOR VENUS
       do {
         if (ask.confirm === true) {
           let num = Math.floor(Math.random() * 2);
@@ -718,8 +748,8 @@ do {
         }
       } while (true);
     }
-    //MARS SELECTION
-    if (planet.select === 'Marte') {
+    //JUPITER SELECTION
+    if (planet.select === 'Jupiter') {
       console.log(
         `Has llegado a ${planet1.name} ${p1.name} junto a tu tripulación de ${p1.people} personas`
       );
@@ -734,7 +764,7 @@ do {
       if (ask.confirm == true) {
         console.log(chalk.bold.yellow('Entrando en el planeta...'));
       }
-      //GAME MISSION LOOP FOR MARS
+      //GAME MISSION LOOP FOR JUPITER
       do {
         if (ask.confirm === true) {
           let num = Math.floor(Math.random() * 2);
@@ -912,197 +942,4 @@ do {
     }
     while (true);
   }
-
-  // Deliver Resources Mission
-  if (mission.select === 'Entrega de Recursos') {
-    console.log(
-      chalk.bold.green(
-        `Hola ${p1.name}, la misión del día de hoy es: ${m1.name}`
-      )
-    );
-    console.log(
-      chalk.bold.green(
-        `La nave cuenta con una tripulación de: ${p1.people} personas`
-      )
-    );
-    console.log(chalk.bold.yellow(`Descripción: ${m1.description}`));
-    let planet = await inquirer.prompt({
-      type: 'list',
-      name: 'select',
-      message: 'Selecciona el planeta que quieres visitar:',
-      choices: [planet1.name, planet2.name, planet3.name],
-    });
-    console.log(
-      chalk.bold.green(`Has seleccionado el planeta: ${planet.select}`)
-    );
-    //MARS SELECTION
-    if (planet.select === 'Marte') {
-      console.log(
-        `Has llegado a ${planet1.name} ${p1.name} junto a tu tripulación de ${p1.people} personas`
-      );
-      console.log(
-        `Dentro de el planeta ${planet1.name}, existe una gran cantidad de ${planet1.resourceType} pero es un planeta ${planet1.dangerLevel} por lo que no debes preocuparte mucho`
-      );
-      let ask = await inquirer.prompt({
-        type: 'confirm',
-        name: 'confirm',
-        message: '¿Quieres investigar el planeta Marte?',
-      });
-      if (ask.confirm == true) {
-        console.log(chalk.bold.yellow('Investigando...'));
-      }
-      do {
-        if (ask.confirm === true) {
-          let num = Math.floor(Math.random() * 2);
-          let exploration = await inquirer.prompt({
-            type: 'list',
-            name: 'direction',
-            message: 'Selecciona la dirección a explorar:',
-            choices: [
-              direction1.direction,
-              direction2.direction,
-              direction3.direction,
-              direction4.direction,
-            ],
-          });
-          if (num > 0) {
-            p1.spaceshipDamage();
-            console.log(
-              chalk.bold.red(
-                `Tu nave ha sido dañada, tu salud actual es de: ${p1.spaceshipHealth}`
-              )
-            );
-          }
-          if (num <= 0) {
-            console.log(
-              chalk.bold.green('Misión completada, has encontrado vida humana')
-            );
-            process.exit();
-          }
-          if (p1.spaceshipHealth <= 0) {
-            console.log(chalk.bold.red('Tu nave ha sido destruida'));
-            process.exit();
-          }
-        } else if (ask.confirm == false) {
-          console.log(
-            chalk.bold.red('Misión cancelada, regresando a el Planeta Tierra')
-          );
-          process.exit();
-        }
-      } while (true);
-    }
-    //VENUS SELECTION
-    if (planet.select === 'Venus') {
-      console.log(
-        `Has llegado a ${planet2.name} ${p1.name} junto a tu tripulación de ${p1.people} personas`
-      );
-      console.log(
-        `Dentro de el planeta ${planet2.name}, existe una gran cantidad de ${planet2.resourceType} pero es un planeta ${planet2.dangerLevel} por lo que debes estar un poco alerta`
-      );
-      let ask = await inquirer.prompt({
-        type: 'confirm',
-        name: 'confirm',
-        message: '¿Quieres investigar el planeta Marte?',
-      });
-      if (ask.confirm == true) {
-        console.log(chalk.bold.yellow('Investigando...'));
-      }
-      do {
-        if (ask.confirm === true) {
-          let num = Math.floor(Math.random() * 2);
-          let exploration = await inquirer.prompt({
-            type: 'list',
-            name: 'direction',
-            message: 'Selecciona la dirección a explorar:',
-            choices: [
-              direction1.direction,
-              direction2.direction,
-              direction3.direction,
-              direction4.direction,
-            ],
-          });
-          if (num > 0) {
-            p1.spaceshipDamage();
-            console.log(
-              chalk.bold.red(
-                `Tu nave ha sido dañada, tu salud actual es de: ${p1.spaceshipHealth}`
-              )
-            );
-          }
-          if (num <= 0) {
-            console.log(
-              chalk.bold.green('Misión completada, has encontrado vida humana')
-            );
-            process.exit();
-          }
-          if (p1.spaceshipHealth <= 0) {
-            console.log(chalk.bold.red('Tu nave ha sido destruida'));
-            process.exit();
-          }
-        } else if (ask.confirm == false) {
-          console.log(
-            chalk.bold.red('Misión cancelada, regresando a el Planeta Tierra')
-          );
-          process.exit();
-        }
-      } while (true);
-    }
-    //JUPITER SELECTION
-    if (planet.select === 'Jupiter') {
-      console.log(
-        `Has llegado a ${planet3.name} ${p1.name} junto a tu tripulación de ${p1.people} personas`
-      );
-      console.log(
-        `Dentro de el planeta ${planet3.name}, existe una gran cantidad de ${planet3.resourceType} pero es un planeta ${planet3.dangerLevel} por lo que debes tener cuidado`
-      );
-      let ask = await inquirer.prompt({
-        type: 'confirm',
-        name: 'confirm',
-        message: '¿Quieres investigar el planeta Marte?',
-      });
-      if (ask.confirm == true) {
-        console.log(chalk.bold.yellow('Investigando...'));
-      }
-      do {
-        if (ask.confirm === true) {
-          let num = Math.floor(Math.random() * 2);
-          let exploration = await inquirer.prompt({
-            type: 'list',
-            name: 'direction',
-            message: 'Selecciona la dirección a explorar:',
-            choices: [
-              direction1.direction,
-              direction2.direction,
-              direction3.direction,
-              direction4.direction,
-            ],
-          });
-          if (num > 0) {
-            p1.spaceshipDamage();
-            console.log(
-              chalk.bold.red(
-                `Tu nave ha sido dañada, tu salud actual es de: ${p1.spaceshipHealth}`
-              )
-            );
-          }
-          if (num <= 0) {
-            console.log(
-              chalk.bold.green('Misión completada, has encontrado vida humana')
-            );
-            process.exit();
-          }
-          if (p1.spaceshipHealth <= 0) {
-            console.log(chalk.bold.red('Tu nave ha sido destruida'));
-            process.exit();
-          }
-        } else if (ask.confirm == false) {
-          console.log(
-            chalk.bold.red('Misión cancelada, regresando a el Planeta Tierra')
-          );
-          process.exit();
-        }
-      } while (true);
-    }
-  }
 } while (true);
-//FALTA DE REALIZAR LAS OTRAS DOS MISIONES, RECOLECTAR RECURSOS Y ENTREGA DE RECURSOS

@@ -1,6 +1,0 @@
-let capacity = await inquirer.prompt({
-  type: 'list',
-  name: 'resources',
-  message: 'Has encontrado los siguientes recursos:',
-  choices: ['Agua', 'Comida', 'Madera'],
-});
